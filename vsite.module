@@ -1,0 +1,40 @@
+<?php
+
+
+/**
+ * Implementation of hook_ctools_plugin_api().
+ */
+function vsite_ctools_plugin_api($module, $api) {
+  if ($module == "vsite" && $api == "vsite") {
+    return array("version" => 2);
+  }
+  else if ($module == 'vsite' && $api == 'plugins') {
+    return array('version' => 2);
+  }
+}
+
+/**
+ * Implementation of hook spaces_plugins
+ */
+function vsite_spaces_plugins() {
+  $plugins = array();
+  $plugins['vsite'] = array(
+    'handler' => array(
+      'path' => drupal_get_path('module', 'vsite') .'/plugins',
+      'file' => 'vsite.inc',
+      'class' => 'vsite',
+      'parent' => 'space_og',
+    ),
+  );
+  return $plugins;
+}
+
+/**
+ * Alter the registry to replace spaces_og with vsite
+ */
+function vsite_spaces_registry_alter(&$registry){
+
+  if (isset($registry['types']['og'])) {
+    $registry['types']['og']['plugin'] = 'vsite';
+  }
+}
